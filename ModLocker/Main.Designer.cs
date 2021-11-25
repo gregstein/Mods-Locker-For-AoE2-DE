@@ -137,6 +137,7 @@ namespace ModLocker
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listPROFILE);
             this.Controls.Add(this.fp);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "Mods Locker for AoE2 DE (By GregStein)";
             this.Load += new System.EventHandler(this.Form1_Load);
