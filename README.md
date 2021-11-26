@@ -10,7 +10,7 @@
 ## How It Works?
  
  1. Close AoE2 DE.
- 2. Download The Tool zip file from here: https://github.com/gregstein/Mods-Locker-For-AoE2-DE/releases/download/1.0/Mods.Locker.V1.zip
+ 2. Download The Tool zip file from here: https://github.com/gregstein/Mods-Locker-For-AoE2-DE/releases/download/1.1/Mods.Locker.V1.1.zip
  3. Extract + Run it and Check ONLY The Mods you want (Uncheck other mods you won't be using)
  4. Click Apply Settings Button Then click the yellow lock button.
 
