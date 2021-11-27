@@ -136,9 +136,6 @@ namespace ModLocker
             this.modsta.TabIndex = 7;
             this.modsta.TabStop = false;
             this.modsta.Visible = false;
-            this.modsta.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.modsta_LoadCompleted);
-            this.modsta.Click += new System.EventHandler(this.modsta_Click);
-            this.modsta.Paint += new System.Windows.Forms.PaintEventHandler(this.modsta_Paint);
             // 
             // Main
             // 

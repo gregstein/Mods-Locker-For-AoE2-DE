@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -11,7 +10,6 @@ using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows.Forms;
 
 namespace ModLocker
@@ -22,8 +20,6 @@ namespace ModLocker
     public partial class Main : Form
     {
         public int i = 0;
-        private Image saved;
-        private Image unsaved;
         public string dePATH = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Games\Age of Empires 2 DE";
         Dictionary<string, string> USERprofiles = new Dictionary<string, string>();
         Dictionary<string, string> MODict = new Dictionary<string, string>();
@@ -64,8 +60,6 @@ namespace ModLocker
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            saved = Properties.Resources.saved;
-            unsaved = Properties.Resources.unsaved;
             ScanDirectories();
 
 
@@ -259,7 +253,7 @@ namespace ModLocker
                     Thread.Sleep(2000);
                     modsta.Visible = false;
                 });
-                
+
 
             }
 
@@ -440,21 +434,6 @@ namespace ModLocker
             }
         }
 
-      
 
-        private void modsta_LoadCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-        }
-
-        private void modsta_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void modsta_Paint(object sender, PaintEventArgs e)
-        {
-           
-
-        }
     }
 }
