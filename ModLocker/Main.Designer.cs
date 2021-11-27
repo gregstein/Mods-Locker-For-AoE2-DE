@@ -39,16 +39,17 @@ namespace ModLocker
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.modsta = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.modsta)).BeginInit();
             this.SuspendLayout();
             // 
             // fp
             // 
+            this.fp.AllowDrop = true;
             this.fp.AutoScroll = true;
             this.fp.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.fp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fp.Location = new System.Drawing.Point(13, 74);
-            this.fp.MaximumSize = new System.Drawing.Size(356, 222);
-            this.fp.MinimumSize = new System.Drawing.Size(356, 222);
             this.fp.Name = "fp";
             this.fp.Size = new System.Drawing.Size(356, 222);
             this.fp.TabIndex = 0;
@@ -125,11 +126,26 @@ namespace ModLocker
             this.progressBar1.Size = new System.Drawing.Size(356, 10);
             this.progressBar1.TabIndex = 6;
             // 
+            // modsta
+            // 
+            this.modsta.Image = global::ModLocker.Properties.Resources.saved;
+            this.modsta.Location = new System.Drawing.Point(15, 302);
+            this.modsta.Name = "modsta";
+            this.modsta.Size = new System.Drawing.Size(110, 32);
+            this.modsta.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.modsta.TabIndex = 7;
+            this.modsta.TabStop = false;
+            this.modsta.Visible = false;
+            this.modsta.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.modsta_LoadCompleted);
+            this.modsta.Click += new System.EventHandler(this.modsta_Click);
+            this.modsta.Paint += new System.Windows.Forms.PaintEventHandler(this.modsta_Paint);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 358);
+            this.Controls.Add(this.modsta);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.locker);
@@ -138,9 +154,12 @@ namespace ModLocker
             this.Controls.Add(this.listPROFILE);
             this.Controls.Add(this.fp);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(402, 397);
             this.Name = "Main";
             this.Text = "Mods Locker for AoE2 DE (By GregStein)";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.modsta)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,6 +175,7 @@ namespace ModLocker
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.PictureBox modsta;
     }
 }
 
