@@ -37,9 +37,9 @@ namespace ModLocker
             this.applychange = new System.Windows.Forms.Button();
             this.locker = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.label2 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.modsta = new System.Windows.Forms.PictureBox();
+            this.autoDEL = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.modsta)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,17 +108,6 @@ namespace ModLocker
             this.imageList1.Images.SetKeyName(0, "lock.png");
             this.imageList1.Images.SetKeyName(1, "unlock.png");
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.DarkRed;
-            this.label2.Location = new System.Drawing.Point(29, 45);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(299, 16);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Mods that you Uncheck will be REMOVED!";
-            // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(13, 64);
@@ -137,14 +126,28 @@ namespace ModLocker
             this.modsta.TabStop = false;
             this.modsta.Visible = false;
             // 
+            // autoDEL
+            // 
+            this.autoDEL.AutoSize = true;
+            this.autoDEL.Checked = true;
+            this.autoDEL.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoDEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.autoDEL.ForeColor = System.Drawing.Color.Maroon;
+            this.autoDEL.Location = new System.Drawing.Point(15, 45);
+            this.autoDEL.Name = "autoDEL";
+            this.autoDEL.Size = new System.Drawing.Size(188, 19);
+            this.autoDEL.TabIndex = 8;
+            this.autoDEL.Text = "Auto Delete Unchecked Mods";
+            this.autoDEL.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 358);
+            this.Controls.Add(this.autoDEL);
             this.Controls.Add(this.modsta);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.locker);
             this.Controls.Add(this.applychange);
             this.Controls.Add(this.label1);
@@ -169,10 +172,10 @@ namespace ModLocker
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button applychange;
         private System.Windows.Forms.Button locker;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.PictureBox modsta;
+        private System.Windows.Forms.CheckBox autoDEL;
     }
 }
 

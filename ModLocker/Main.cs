@@ -228,7 +228,25 @@ namespace ModLocker
 
                             if (str == ((CheckBox)t).Text)
                             {
-                                FileSystem.DeleteDirectory(m, DeleteDirectoryOption.DeleteAllContents);
+                                if (autoDEL.Checked)
+                                    FileSystem.DeleteDirectory(m, DeleteDirectoryOption.DeleteAllContents);
+                                else
+                                {
+                                    foreach (var item in dc.Mods)
+                                    {
+                                        if (((CheckBox)t).Text == item.Title)
+                                        {
+                                            item.Title = t.Text;
+                                            item.Priority = prioMOD;
+                                            item.Enabled = false;
+                                            rc.Mods.Add(item);
+                                            continue;
+                                        }
+
+
+                                    }
+
+                                }
 
                             }
                             progressBar1.Value = i;
