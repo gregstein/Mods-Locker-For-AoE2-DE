@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 
 namespace ModLocker
 {
-    class FileProcess
+    static class FileProcess
     {
 
         /// <summary>
@@ -44,6 +47,45 @@ namespace ModLocker
                     Thread.Sleep(100);
                 }
             }
+        }
+        public static bool IsWriteable(this DirectoryInfo me)
+        {
+            AuthorizationRuleCollection rules;
+            WindowsIdentity identity;
+            try
+            {
+                rules = me.GetAccessControl().GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+                identity = WindowsIdentity.GetCurrent();
+            }
+            catch (UnauthorizedAccessException uae)
+            {
+                Debug.WriteLine(uae.ToString());
+                return false;
+            }
+
+            bool isAllow = false;
+            string userSID = identity.User.Value;
+
+            foreach (FileSystemAccessRule rule in rules)
+            {
+                if (rule.IdentityReference.ToString() == userSID || identity.Groups.Contains(rule.IdentityReference))
+                {
+                    if ((rule.FileSystemRights.HasFlag(FileSystemRights.Write) ||
+                        rule.FileSystemRights.HasFlag(FileSystemRights.WriteAttributes) ||
+                        rule.FileSystemRights.HasFlag(FileSystemRights.WriteData) ||
+                        rule.FileSystemRights.HasFlag(FileSystemRights.CreateDirectories) ||
+                        rule.FileSystemRights.HasFlag(FileSystemRights.CreateFiles)) && rule.AccessControlType == AccessControlType.Deny)
+                        return false;
+                    else if ((rule.FileSystemRights.HasFlag(FileSystemRights.Write) &&
+                        rule.FileSystemRights.HasFlag(FileSystemRights.WriteAttributes) &&
+                        rule.FileSystemRights.HasFlag(FileSystemRights.WriteData) &&
+                        rule.FileSystemRights.HasFlag(FileSystemRights.CreateDirectories) &&
+                        rule.FileSystemRights.HasFlag(FileSystemRights.CreateFiles)) && rule.AccessControlType == AccessControlType.Allow)
+                        isAllow = true;
+
+                }
+            }
+            return isAllow;
         }
 
     }

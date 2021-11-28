@@ -129,15 +129,13 @@ namespace ModLocker
             // autoDEL
             // 
             this.autoDEL.AutoSize = true;
-            this.autoDEL.Checked = true;
-            this.autoDEL.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoDEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.autoDEL.ForeColor = System.Drawing.Color.Maroon;
             this.autoDEL.Location = new System.Drawing.Point(15, 45);
             this.autoDEL.Name = "autoDEL";
-            this.autoDEL.Size = new System.Drawing.Size(188, 19);
+            this.autoDEL.Size = new System.Drawing.Size(168, 19);
             this.autoDEL.TabIndex = 8;
-            this.autoDEL.Text = "Auto Delete Unchecked Mods";
+            this.autoDEL.Text = "Delete Unchecked Mods?";
             this.autoDEL.UseVisualStyleBackColor = true;
             // 
             // Main
@@ -157,7 +155,7 @@ namespace ModLocker
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(402, 397);
             this.Name = "Main";
-            this.Text = "Mods Locker for AoE2 DE (By GregStein)";
+            this.Text = "Mods Locker (V2) for AoE2 DE (By GregStein)";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.modsta)).EndInit();
             this.ResumeLayout(false);

@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Security.AccessControl;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -179,20 +178,46 @@ namespace ModLocker
         private void applychange_Click(object sender, EventArgs e)
         {
             int _curINDEX = listPROFILE.SelectedIndex;
-            resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
-            resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+            //resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+            //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.IDGROUP._admins, FileProcess.PT._fullCONTROLL);
+            //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
+            //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._admins, FileProcess.PT._fullCONTROLL);
+            //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._users, FileProcess.PT._fullCONTROLL);
+            //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
             applychange.Enabled = false;
             JsonSerializerSettings jsonSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.None
             };
             Root rc = JsonConvert.DeserializeObject<Root>(Properties.Resources.empty);
+            var mdirs = Directory.GetDirectories(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", "*", System.IO.SearchOption.TopDirectoryOnly);
+
+            //Wait for disposable
+            if (dc.Mods.Count != fp.Controls.Count)
+            {
+                dc.Mods.Clear();
+                int js = 0;
+                foreach (string m in mdirs)
+                {
+                    js++;
+                    dc.Mods.Add(new Mod() { Enabled = true, Title = Path.GetFileName(m), Priority = js, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+                }
+                string scx = JsonConvert.SerializeObject(dc);
+                File.WriteAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", scx);
+            }
+
+
+
+
             int prioMOD = 0;
             foreach (Control t in fp.Controls)
             {
                 prioMOD++;
+                //Start Parsing
                 if (((CheckBox)t).Checked)
                 {
+                    //if 0 json entries
+
                     foreach (var item in dc.Mods)
                     {
                         if (((CheckBox)t).Text == item.Title)
@@ -207,12 +232,24 @@ namespace ModLocker
 
                     }
 
+                    int i = 0;
+                    foreach (string m in mdirs)
+                    {
+                        i++;
+                        if (Path.GetFileName(m) == ((CheckBox)t).Text)
+                        {
+                            dc.Mods.Add(new Mod() { Enabled = true, Title = Path.GetFileName(m), Priority = i, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+                        }
+
+                    }
+
+
+
                 }
                 else if (((CheckBox)t).Checked == false)
                 {
                     try
                     {
-                        var mdirs = Directory.GetDirectories(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", "*", System.IO.SearchOption.TopDirectoryOnly);
                         int cmdir = mdirs.Count();
                         progressBar1.Maximum = cmdir;
                         progressBar1.Value = 0;
@@ -222,11 +259,11 @@ namespace ModLocker
                         {
                             i++;
 
-                            string str = Regex.Replace(Path.GetFileName(m), "\\d+_", "");
-                            str = Regex.Replace(str, "_", " ");
-                            str = Regex.Replace(str, @"[[][\s\S]*?[]]", "");
+                            //string str = Regex.Replace(Path.GetFileName(m), "\\d+_", "");
+                            //str = Regex.Replace(str, "_", " ");
+                            //str = Regex.Replace(str, @"[[][\s\S]*?[]]", "");
 
-                            if (str == ((CheckBox)t).Text)
+                            if (Path.GetFileName(m) == ((CheckBox)t).Text)
                             {
                                 if (autoDEL.Checked)
                                     FileSystem.DeleteDirectory(m, DeleteDirectoryOption.DeleteAllContents);
@@ -264,6 +301,7 @@ namespace ModLocker
                     }
 
                 }
+                //END PARSING
                 modsta.Visible = true;
                 modsta.Image = Properties.Resources.saved;
                 var task = Task.Factory.StartNew(() =>
@@ -275,7 +313,6 @@ namespace ModLocker
 
             }
 
-
             string sc = JsonConvert.SerializeObject(rc);
             if (listPROFILE.SelectedItem == null)
             {
@@ -284,35 +321,36 @@ namespace ModLocker
                 return;
             }
             Thread.Sleep(100);
-            var fileInfo = new FileInfo(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
-            if (fileInfo.IsReadOnly)
-                fileInfo.IsReadOnly = false;
+            //var fileInfo = new FileInfo(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+            //if (fileInfo.IsReadOnly)
+            //    fileInfo.IsReadOnly = false;
 
             string jsonPath = USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json";
             try
             {
-                if (File.Exists(jsonPath))
-                {
-                    File.Delete(jsonPath);
-                }
-                //Wait for disposable
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
+
 
                 if (File.Exists(jsonPath))
                 {
                     File.Delete(jsonPath);
                 }
+                ////Wait for disposable
+                //GC.Collect();
+                //GC.WaitForPendingFinalizers();
+
+
                 using (StreamWriter writer = new StreamWriter(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", false))
                 {
                     writer.Write(sc);
                 }
 
             }
-            catch (SystemException)
+            catch (SystemException res)
             {
-
+                MessageBox.Show(res.ToString());
                 applychange.Enabled = true;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 File.WriteAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", sc);
 
             }
@@ -354,7 +392,26 @@ namespace ModLocker
                     control.Enabled = false;
             }
         }
-
+        private bool isEDIBL(string path)
+        {
+            try
+            {
+                using (var fs = new FileStream(path, FileMode.Open))
+                {
+                    bool canRead = fs.CanRead;
+                    bool canWrite = fs.CanWrite;
+                    if (canRead && canWrite)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            catch (SystemException)
+            {
+                return false;
+            }
+            
+        }
         private void listPROFILE_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -377,29 +434,82 @@ namespace ModLocker
                         return;
 
                     }
+                     if(isEDIBL(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"))
+                        dc = JsonConvert.DeserializeObject<Root>(File.ReadAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"));
+                     else
+                    {
+                        locker.ImageIndex = 0;
+                        fp.Controls.Add(new Label() { Name = "warnlbl", Text = "Press The Lock Icon To Edit and Unlock Your Mods", AutoSize = true, ForeColor = System.Drawing.Color.DarkRed });
+                        MessageBox.Show("Your Mods are Currently Locked.\nYou can Click The Lock icon to enable the edit mode.", "Mod Locker");
+                        return;
+                    }
 
-                    dc = JsonConvert.DeserializeObject<Root>(File.ReadAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"));
                     var mdirs = Directory.GetDirectories(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", "*", System.IO.SearchOption.TopDirectoryOnly);
+
+                    if (dc == null)
+                    {
+                        dc = JsonConvert.DeserializeObject<Root>(Properties.Resources.empty);
+                        MODict.Clear();
+                        int js = 0;
+                        foreach (string m in mdirs)
+                        {
+                            js++;
+                            dc.Mods.Add(new Mod() { Enabled = false, Title = Path.GetFileName(m), Priority = js, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+                        }
+                        string scx = JsonConvert.SerializeObject(dc);
+                        File.WriteAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", scx);
+                    }
 
                     int j = 0;
                     foreach (var item in dc.Mods)
                     {
                         i++;
                         fp.Controls.Add(new CheckBox() { Name = "cb_" + i.ToString(), Text = item.Title, Checked = item.Enabled, AutoSize = true });
-                        MODict.Add(item.Path.Replace(@"subscribed//", @""), USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed\" + item.Path.Replace(@"subscribed//", @""));
+                        string itpath = item.Path ?? "";
+                        try
+                        {
+                            MODict.Add(itpath.Replace(@"subscribed//", @"") ?? "subscribed//", USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed\" + itpath.Replace(@"subscribed//", @"") ?? "subscribed//");
+
+                        }
+                        catch (Exception)
+                        {
+                            MODict.Clear();
+                            dc.Mods.Clear();
+                            int js = 0;
+                            foreach (string m in mdirs)
+                            {
+                                js++;
+                                dc.Mods.Add(new Mod() { Enabled = true, Title = Path.GetFileName(m), Priority = js, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+                            }
+                            string scx = JsonConvert.SerializeObject(dc);
+                            File.WriteAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", scx);
+                            break;
+                        }
+
+
 
                     }
                     var lstcb = new List<string>();
                     foreach (Control cr in fp.Controls)
                         if (cr is CheckBox)
                             lstcb.Add(cr.Text);
+                    bool isEMPTY = false;
 
-
+                    if (dc.Mods.Count == 0)
+                        isEMPTY = true;
+                    else
+                        isEMPTY = false;
 
                     foreach (string m in mdirs)
                     {
+
                         j++;
 
+                        if (isEMPTY)
+                        {
+                            dc.Mods.Add(new Mod() { Enabled = true, Title = Path.GetFileName(m), Priority = j, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+
+                        }
 
                         if (lstcb.Contains(Path.GetFileName(m)) || MODict.ContainsKey(Path.GetFileName(m)))
                         {
@@ -422,13 +532,27 @@ namespace ModLocker
                 }
                 catch (System.NullReferenceException ty)
                 {
-                    MessageBox.Show(ty.Message, "Mod Locker");
+
+                    MessageBox.Show(ty.ToString(), "Mod Locker");
                 }
-                catch (Exception)
+                catch(Newtonsoft.Json.JsonReaderException)
                 {
+                    var mdirs = Directory.GetDirectories(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", "*", System.IO.SearchOption.TopDirectoryOnly);
+                    int js = 0;
+                    foreach (string m in mdirs)
+                    {
+                        js++;
+                        dc.Mods.Add(new Mod() { Enabled = true, Title = Path.GetFileName(m), Priority = js, Path = @"//" + Path.GetFileName(m), LastUpdate = "", PublishID = 0, WorkshopID = 0 });
+                    }
+                    string scx = JsonConvert.SerializeObject(dc);
+                    File.WriteAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", scx);
+                }
+                catch (Exception exd)
+                {
+                    MessageBox.Show(exd.ToString());
                     locker.ImageIndex = 0;
                     fp.Controls.Add(new Label() { Name = "warnlbl", Text = "Press The Lock Icon To Edit and Unlock Your Mods", AutoSize = true, ForeColor = System.Drawing.Color.DarkRed });
-                    MessageBox.Show("Your Mods are Currently Locked.\nClick The Lock icon to Unlock them.", "Mod Locker"); ;
+                    MessageBox.Show("Your Mods are Currently Locked.\nYou can Click The Lock icon to enable the edit mode.", "Mod Locker");
                 }
 
             }
