@@ -6,6 +6,14 @@
 ![AoEIIDE_icon2](https://user-images.githubusercontent.com/16618729/143504005-0412f077-561d-421e-841d-fa7260ffae05.png)
 
  A simple program that stops AoE2 DE from disabling your mods AND adding anniversary/achievement mods.
+
+## Demos
+
+### Re-order Your Mods (Mouse Right Click)
+![AoEIIDE_icon2](https://i.giphy.com/media/Un8zieWNrEiE01uqHx/giphy.gif)
+
+### Lock Your Mods
+![AoEIIDE_icon2](https://i.giphy.com/media/xprOpXtvMQ8vxJR93Z/giphy.gif)
  
 ## How It Works?
  
