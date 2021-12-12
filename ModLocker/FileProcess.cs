@@ -18,6 +18,11 @@ namespace ModLocker
             public const string _readEXEC = "RX";
             public const string _fullCONTROLL = "F";
         }
+        public static class GD
+        {
+            public const string _grant = "grant";
+            public const string _deny = "deny";
+        }
         public class IDGROUP
         {
 
@@ -32,13 +37,13 @@ namespace ModLocker
         /// <param name="path">folder or file path</param>
         /// <param name="identity">from IDGROUP</param>
         /// <param name="perm">from PT</param>
-        public static void _processHANDLR(string path, string identity, string perm)
+        public static void _processHANDLR(string path, string gd, string identity, string perm)
         {
 
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.Arguments = "/c icacls \"" + path + "\" /inheritance:r /grant:r " + identity + ":(OI)(CI)" + perm + " /T";
+                process.StartInfo.Arguments = "/c icacls \"" + path + "\" /inheritance:d /" + gd + " " + identity + ":" + perm + " /T";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
@@ -47,6 +52,45 @@ namespace ModLocker
                     Thread.Sleep(100);
                 }
             }
+        }
+        public static void resetPERMISIONS(string path)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = "/c ICACLS \"" + path + "\" /reset /T";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+            }
+
+        }
+        public static void setREADONLY(string path)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = "/c ICACLS \"" + path + "\" /inheritance:r /grant:r *S-1-1-0:RX";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+            }
+
+        }
+        public static void setREADONLYDIR(string path)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = "/c ICACLS " + "\"" + path + "\"" + " /reset /T & " + "ICACLS \"" + path + "\" /inheritance:r /grant:rx *S-1-1-0:(OI)(CI)RX";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+            }
+
         }
         public static bool IsWriteable(this DirectoryInfo me)
         {

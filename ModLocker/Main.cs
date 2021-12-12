@@ -59,11 +59,20 @@ namespace ModLocker
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            isDERUNNING();
             ScanDirectories();
 
 
         }
-
+        private void isDERUNNING()
+        {
+            Process[] pname = Process.GetProcessesByName("AoE2DE_s");
+            if (pname.Length != 0)
+            {
+                MessageBox.Show("Please Close AoE2DE Before Using The Tool!", "Close Age of Empires 2 DE");
+                Application.Exit();
+            }
+        }
         bool IsDigitsOnly(string str)
         {
             foreach (char c in str)
@@ -112,20 +121,28 @@ namespace ModLocker
         {
 
             int curINDEX = listPROFILE.SelectedIndex;
-            resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
-            resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+            FileProcess.resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
+            FileProcess.resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
 
             try
             {
                 if (locker.ImageIndex == 1)
                 {
                     locker.ImageIndex = 0; //Changed to Locked Here
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.IDGROUP._admins, FileProcess.PT._readEXEC);
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.IDGROUP._system, FileProcess.PT._readEXEC);
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.IDGROUP._users, FileProcess.PT._readEXEC);
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._admins, FileProcess.PT._readEXEC);
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._users, FileProcess.PT._readEXEC);
-                    FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.IDGROUP._system, FileProcess.PT._readEXEC);
+                    FileProcess.setREADONLY(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+                    FileProcess.setREADONLYDIR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._deny, FileProcess.IDGROUP._admins, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._grant, FileProcess.IDGROUP._admins, FileProcess.PT._readEXEC);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._deny, FileProcess.IDGROUP._users, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._grant, FileProcess.IDGROUP._users, FileProcess.PT._readEXEC);
+                    ////FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._deny, FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", FileProcess.GD._grant, FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._deny, FileProcess.IDGROUP._admins, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._grant, FileProcess.IDGROUP._admins, FileProcess.PT._readEXEC);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._deny, FileProcess.IDGROUP._users, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._grant, FileProcess.IDGROUP._users, FileProcess.PT._readEXEC);
+                    ////FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._deny, FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
+                    //FileProcess._processHANDLR(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json", FileProcess.GD._grant, FileProcess.IDGROUP._system, FileProcess.PT._fullCONTROLL);
 
                     foreach (Control control in fp.Controls)
                         control.Enabled = false;
@@ -138,8 +155,8 @@ namespace ModLocker
 
                 {
                     locker.ImageIndex = 1;//Change to Unlocked here
-                    resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
-                    resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
+                    FileProcess.resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed");
+                    FileProcess.resetPERMISIONS(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json");
                     foreach (Control control in fp.Controls)
                         control.Enabled = true;
 
@@ -158,19 +175,6 @@ namespace ModLocker
             {
 
                 MessageBox.Show(xe.Message, "Mods Locker");
-            }
-
-        }
-        private void resetPERMISIONS(string path)
-        {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.Arguments = "/c ICACLS \"" + path + "\" /reset /T";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
-                process.WaitForExit();
             }
 
         }
@@ -220,7 +224,7 @@ namespace ModLocker
 
                     foreach (var item in dc.Mods)
                     {
-                        if (((CheckBox)t).Text == item.Title)
+                        if (((CheckBox)t).Text == item.Path.Replace("subscribed//", ""))
                         {
                             item.Title = t.Text;
                             item.Priority = prioMOD;
@@ -265,27 +269,10 @@ namespace ModLocker
 
                             if (Path.GetFileName(m) == ((CheckBox)t).Text)
                             {
-                                if (autoDEL.Checked)
-                                    FileSystem.DeleteDirectory(m, DeleteDirectoryOption.DeleteAllContents);
-                                else
-                                {
-                                    foreach (var item in dc.Mods)
-                                    {
-                                        if (((CheckBox)t).Text == item.Title)
-                                        {
-                                            item.Title = t.Text;
-                                            item.Priority = prioMOD;
-                                            item.Enabled = false;
-                                            rc.Mods.Add(item);
-                                            continue;
-                                        }
-
-
-                                    }
-
-                                }
+                                FileSystem.DeleteDirectory(m, DeleteDirectoryOption.DeleteAllContents);
 
                             }
+
                             progressBar1.Value = i;
 
                         }
@@ -304,11 +291,7 @@ namespace ModLocker
                 //END PARSING
                 modsta.Visible = true;
                 modsta.Image = Properties.Resources.saved;
-                var task = Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(2000);
-                    modsta.Visible = false;
-                });
+
 
 
             }
@@ -358,7 +341,11 @@ namespace ModLocker
 
             ScanDirectories(_curINDEX);
 
-
+            var task = Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(2000);
+                modsta.Visible = false;
+            });
             applychange.Enabled = true;
 
         }
@@ -410,7 +397,7 @@ namespace ModLocker
             {
                 return false;
             }
-            
+
         }
         private void listPROFILE_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -434,9 +421,9 @@ namespace ModLocker
                         return;
 
                     }
-                     if(isEDIBL(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"))
+                    if (isEDIBL(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"))
                         dc = JsonConvert.DeserializeObject<Root>(File.ReadAllText(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\mod-status.json"));
-                     else
+                    else
                     {
                         locker.ImageIndex = 0;
                         fp.Controls.Add(new Label() { Name = "warnlbl", Text = "Press The Lock Icon To Edit and Unlock Your Mods", AutoSize = true, ForeColor = System.Drawing.Color.DarkRed });
@@ -464,7 +451,7 @@ namespace ModLocker
                     foreach (var item in dc.Mods)
                     {
                         i++;
-                        fp.Controls.Add(new CheckBox() { Name = "cb_" + i.ToString(), Text = item.Title, Checked = item.Enabled, AutoSize = true });
+                        fp.Controls.Add(new CheckBox() { Name = "cb_" + i.ToString(), Text = item.Path.Replace("subscribed//", ""), Checked = item.Enabled, AutoSize = true });
                         string itpath = item.Path ?? "";
                         try
                         {
@@ -535,7 +522,7 @@ namespace ModLocker
 
                     MessageBox.Show(ty.ToString(), "Mod Locker");
                 }
-                catch(Newtonsoft.Json.JsonReaderException)
+                catch (Newtonsoft.Json.JsonReaderException)
                 {
                     var mdirs = Directory.GetDirectories(USERprofiles[listPROFILE.SelectedItem.ToString()] + @"\mods\subscribed", "*", System.IO.SearchOption.TopDirectoryOnly);
                     int js = 0;
